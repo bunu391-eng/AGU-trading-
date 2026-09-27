@@ -1,182 +1,89 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="FOREX ANALYZER — technical analysis dashboard, risk calculator and trade journal.">
-  <title>FOREX ANALYZER — Trading Analysis Dashboard</title>
-  <link rel="stylesheet" href="styles.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AGU TRADING — Live Forex Analyzer</title>
+<link rel="stylesheet" href="styles.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 </head>
 <body>
-  <div class="app-shell">
-    <aside class="sidebar">
-      <div class="brand"><span class="brand-mark">FX</span><div><b>FOREX</b><small>ANALYZER</small></div></div>
-      <nav>
-        <button class="nav-btn active" data-view="dashboard">⌁ Dashboard</button>
-        <button class="nav-btn" data-view="technical">◈ Technical Analysis</button>
-        <button class="nav-btn" data-view="risk">◎ Risk Calculator</button>
-        <button class="nav-btn" data-view="journal">▤ Trade Journal</button>
-        <button class="nav-btn" data-view="settings">⚙ Settings</button>
-      </nav>
-      <div class="sidebar-note">
-        <b>Analysis only</b>
-        <p>This tool provides calculations and technical-analysis information. It does not execute trades or guarantee outcomes.</p>
-      </div>
-    </aside>
+<div class="shell">
+<aside class="side">
+  <div class="brand"><span>FX</span><div><b>AGU TRADING</b><small>FOREX ANALYZER</small></div></div>
+  <nav>
+    <button class="nav active" data-page="dashboard">⌁ Dashboard</button>
+    <button class="nav" data-page="analysis">◈ Technical Analysis</button>
+    <button class="nav" data-page="signals">⚡ Signal Provider</button>
+    <button class="nav" data-page="risk">◎ Risk Calculator</button>
+    <button class="nav" data-page="journal">▤ Trade Journal</button>
+    <button class="nav" data-page="settings">⚙ Settings</button>
+  </nav>
+  <div class="side-note"><b>Analysis platform</b><p>Live market data and third-party signals are displayed separately. Nothing here executes trades or guarantees results.</p></div>
+</aside>
 
-    <main class="main">
-      <header class="topbar">
-        <div>
-          <span class="eyebrow">MARKET ANALYSIS TERMINAL</span>
-          <h1 id="pageTitle">Forex Dashboard</h1>
-        </div>
-        <div class="top-actions">
-          <span class="data-badge" id="dataStatus">DEMO DATA</span>
-          <button class="icon-btn" id="themeBtn" title="Toggle theme">☾</button>
-        </div>
-      </header>
+<main class="main">
+<header class="top">
+  <div><small class="eyebrow">AGU TRADING / MARKET TERMINAL</small><h1 id="title">Forex Dashboard</h1></div>
+  <div class="top-right"><span id="connection" class="status demo">● DEMO DATA</span><button id="theme" class="small-btn">☾</button></div>
+</header>
 
-      <section id="dashboard" class="view active">
-        <div class="control-row card">
-          <label>Pair
-            <select id="pairSelect">
-              <option>EUR/USD</option><option>GBP/USD</option><option>USD/JPY</option>
-              <option>USD/CHF</option><option>AUD/USD</option><option>USD/CAD</option>
-              <option>NZD/USD</option><option>EUR/GBP</option>
-            </select>
-          </label>
-          <label>Timeframe
-            <select id="tfSelect"><option value="15">15m</option><option value="60" selected>1H</option><option value="240">4H</option><option value="1440">1D</option></select>
-          </label>
-          <label>Chart type
-            <select id="chartType"><option value="line">Line</option><option value="candle">OHLC-style</option></select>
-          </label>
-          <button class="primary" id="refreshBtn">↻ Refresh analysis</button>
-        </div>
-
-        <div class="stats-grid">
-          <div class="stat card"><span>Current price</span><strong id="price">1.08420</strong><em id="change">+0.18%</em></div>
-          <div class="stat card"><span>RSI (14)</span><strong id="rsi">56.4</strong><em>Neutral zone</em></div>
-          <div class="stat card"><span>ATR (14)</span><strong id="atr">0.00482</strong><em>Volatility</em></div>
-          <div class="stat card"><span>Trend</span><strong id="trend">Bullish</strong><em id="trendMeta">Above EMA 50</em></div>
-        </div>
-
-        <div class="grid-2">
-          <section class="card chart-card">
-            <div class="section-head"><div><h2 id="chartTitle">EUR/USD</h2><span id="chartSub">1H technical view</span></div><span class="live-dot">● market analysis</span></div>
-            <div class="chart-wrap"><canvas id="priceChart"></canvas></div>
-          </section>
-          <section class="card signal-card">
-            <div class="section-head"><div><h2>Signal Matrix</h2><span>Rule-based technical summary</span></div></div>
-            <div id="signals"></div>
-            <div class="analysis-box"><span>Composite reading</span><strong id="composite">Moderately bullish</strong><p id="compositeText">Momentum and trend inputs are aligned, but this is not a prediction or a trading instruction.</p></div>
-          </section>
-        </div>
-
-        <div class="grid-3">
-          <section class="card">
-            <div class="section-head"><h2>Market Sessions</h2></div>
-            <div class="sessions">
-              <div><span>Asia</span><b>Tokyo</b><i>00:00–09:00 UTC</i></div>
-              <div><span>Europe</span><b>London</b><i>08:00–17:00 UTC</i></div>
-              <div><span>US</span><b>New York</b><i>13:00–22:00 UTC</i></div>
-            </div>
-          </section>
-          <section class="card">
-            <div class="section-head"><h2>Indicator Snapshot</h2></div>
-            <ul class="indicator-list" id="indicatorList"></ul>
-          </section>
-          <section class="card">
-            <div class="section-head"><h2>Checklist</h2></div>
-            <label class="check"><input type="checkbox"> Higher-timeframe trend checked</label>
-            <label class="check"><input type="checkbox"> Key support/resistance marked</label>
-            <label class="check"><input type="checkbox"> Stop-loss defined</label>
-            <label class="check"><input type="checkbox"> Risk within plan</label>
-          </section>
-        </div>
-      </section>
-
-      <section id="technical" class="view">
-        <div class="card">
-          <div class="section-head"><div><h2>Technical Analysis Engine</h2><span>Adjust the inputs and inspect the rule-based output.</span></div></div>
-          <div class="technical-grid">
-            <label>RSI <input id="rsiInput" type="number" min="0" max="100" value="56"></label>
-            <label>EMA 20 vs EMA 50
-              <select id="emaInput"><option value="bull">EMA20 above EMA50</option><option value="bear">EMA20 below EMA50</option><option value="flat">Near equal</option></select>
-            </label>
-            <label>MACD
-              <select id="macdInput"><option value="bull">Above signal</option><option value="bear">Below signal</option><option value="flat">Near signal</option></select>
-            </label>
-            <label>Price vs EMA 200
-              <select id="ema200Input"><option value="bull">Above EMA200</option><option value="bear">Below EMA200</option></select>
-            </label>
-            <label>ADX <input id="adxInput" type="number" min="0" max="100" value="24"></label>
-            <label>Volume/Activity
-              <select id="activityInput"><option value="high">High</option><option value="normal" selected>Normal</option><option value="low">Low</option></select>
-            </label>
-          </div>
-          <button class="primary" id="runAnalysis">Run analysis</button>
-          <div id="technicalResult" class="technical-result"></div>
-        </div>
-        <div class="grid-2">
-          <section class="card"><h2>Common indicator logic</h2><ul class="plain"><li>RSI above 70: potentially overbought; below 30: potentially oversold.</li><li>EMA alignment helps describe trend direction.</li><li>MACD relationship describes momentum direction.</li><li>ADX measures trend strength; it does not identify direction by itself.</li><li>ATR describes recent volatility and can help contextualize stop distance.</li></ul></section>
-          <section class="card"><h2>Important limitation</h2><p class="muted">Technical indicators are derived from historical price data. They can conflict, lag price, and produce false signals. The dashboard deliberately labels its output as analysis rather than a guaranteed buy/sell signal.</p></section>
-        </div>
-      </section>
-
-      <section id="risk" class="view">
-        <div class="card">
-          <div class="section-head"><div><h2>Risk & Position Size Calculator</h2><span>Educational calculation — verify pip value with your broker.</span></div></div>
-          <div class="risk-grid">
-            <label>Account balance <input id="balance" type="number" value="10000" min="0"></label>
-            <label>Risk % <input id="riskPct" type="number" value="1" min="0" max="100" step=".1"></label>
-            <label>Entry price <input id="entry" type="number" value="1.0842" step=".00001"></label>
-            <label>Stop price <input id="stop" type="number" value="1.0792" step=".00001"></label>
-            <label>Pip size <input id="pipSize" type="number" value="0.0001" step=".00001"></label>
-            <label>Pip value / standard lot <input id="pipValue" type="number" value="10" step=".01"></label>
-          </div>
-          <button class="primary" id="calcRisk">Calculate</button>
-          <div class="risk-output">
-            <div><span>Amount at risk</span><strong id="riskMoney">$100.00</strong></div>
-            <div><span>Stop distance</span><strong id="stopPips">50 pips</strong></div>
-            <div><span>Suggested size</span><strong id="lotSize">0.20 lots</strong></div>
-            <div><span>1R target</span><strong id="oneR">1.08920</strong></div>
-          </div>
-          <p class="warning">Leverage can magnify both gains and losses. This calculator does not determine whether a trade is appropriate.</p>
-        </div>
-      </section>
-
-      <section id="journal" class="view">
-        <div class="card">
-          <div class="section-head"><div><h2>Trade Journal</h2><span>Saved locally in this browser.</span></div><button class="danger" id="clearJournal">Clear journal</button></div>
-          <form id="journalForm" class="journal-form">
-            <input required id="jPair" placeholder="Pair e.g. EUR/USD">
-            <select id="jSide"><option>Long</option><option>Short</option></select>
-            <input required id="jEntry" type="number" step=".00001" placeholder="Entry">
-            <input required id="jExit" type="number" step=".00001" placeholder="Exit">
-            <input id="jRisk" type="number" step=".01" placeholder="Risk %">
-            <input id="jNotes" placeholder="Notes">
-            <button class="primary" type="submit">Add trade</button>
-          </form>
-          <div class="table-wrap"><table><thead><tr><th>Date</th><th>Pair</th><th>Side</th><th>Entry</th><th>Exit</th><th>Result</th><th>Notes</th></tr></thead><tbody id="journalBody"></tbody></table></div>
-        </div>
-      </section>
-
-      <section id="settings" class="view">
-        <div class="card settings-card">
-          <h2>Data & API Settings</h2>
-          <p>For production, connect this frontend to a licensed market-data provider or your own backend. Never expose a broker secret, paid-data secret, or private API credential in client-side JavaScript.</p>
-          <label>Market data API base URL <input id="apiUrl" placeholder="https://your-backend.example/api"></label>
-          <label>Display currency <select><option>USD</option><option>EUR</option><option>GBP</option><option>NGN</option></select></label>
-          <button class="primary" id="saveSettings">Save local settings</button>
-          <p id="settingsMsg" class="success-msg"></p>
-        </div>
-      </section>
-
-      <footer>FOREX ANALYZER • Technical-analysis workspace • Demo data unless connected to a verified market-data source.</footer>
-    </main>
+<section id="dashboard" class="page active">
+  <div class="toolbar card">
+    <label>Pair<select id="pair"><option>EUR/USD</option><option>GBP/USD</option><option>USD/JPY</option><option>USD/CHF</option><option>AUD/USD</option><option>USD/CAD</option><option>NZD/USD</option><option>EUR/GBP</option><option>XAU/USD</option></select></label>
+    <label>Timeframe<select id="tf"><option value="1min">1m</option><option value="5min">5m</option><option value="15min">15m</option><option value="1h" selected>1H</option><option value="4h">4H</option><option value="1day">1D</option></select></label>
+    <label>Chart<select id="chartMode"><option value="line">Line</option><option value="ohlc">OHLC-style</option></select></label>
+    <button id="refresh" class="primary">↻ Refresh</button>
   </div>
-  <script src="app.js"></script>
-</body>
-</html>
+
+  <div class="stats">
+    <div class="card stat"><span>Market price</span><strong id="price">—</strong><em id="move">Waiting…</em></div>
+    <div class="card stat"><span>RSI (14)</span><strong id="rsi">—</strong><em id="rsiState">—</em></div>
+    <div class="card stat"><span>ATR (14)</span><strong id="atr">—</strong><em>Volatility</em></div>
+    <div class="card stat"><span>AGU analysis</span><strong id="trend">—</strong><em id="trendMeta">—</em></div>
+  </div>
+
+  <div class="two">
+    <section class="card chart-card"><div class="head"><div><h2 id="pairTitle">EUR/USD</h2><small id="chartInfo">1H</small></div><span id="lastUpdate">Not connected</span></div><div class="chart"><canvas id="chart"></canvas></div></section>
+    <section class="card"><div class="head"><div><h2>Signal Matrix</h2><small>Calculated from market data</small></div></div><div id="matrix"></div><div class="composite"><small>Composite reading</small><b id="composite">Waiting for data</b><p id="compositeText">Connect the backend to calculate live indicators.</p></div></section>
+  </div>
+
+  <div class="three">
+    <section class="card"><div class="head"><h2>Live Feed</h2></div><div class="feed"><div><span>Source</span><b id="feedSource">Demo generator</b></div><div><span>Provider</span><b id="feedProvider">Not connected</b></div><div><span>Update</span><b id="feedTime">—</b></div></div></section>
+    <section class="card"><div class="head"><h2>Market Sessions</h2></div><div class="sessions"><div>Asia <span>00:00–09:00 UTC</span></div><div>London <span>08:00–17:00 UTC</span></div><div>New York <span>13:00–22:00 UTC</span></div></div></section>
+    <section class="card"><div class="head"><h2>Checklist</h2></div><label class="check"><input type="checkbox"> Higher timeframe checked</label><label class="check"><input type="checkbox"> Structure marked</label><label class="check"><input type="checkbox"> Risk defined</label><label class="check"><input type="checkbox"> News/event risk checked</label></section>
+  </div>
+</section>
+
+<section id="analysis" class="page">
+<div class="card"><div class="head"><div><h2>Technical Analysis Engine</h2><small>Use actual candles when live data is connected.</small></div></div>
+<div class="grid6"><label>RSI <input id="aRsi" type="number" value="55" min="0" max="100"></label><label>EMA 20/50<select id="aEma"><option value="bull">20 above 50</option><option value="bear">20 below 50</option><option value="flat">Near equal</option></select></label><label>MACD<select id="aMacd"><option value="bull">Above signal</option><option value="bear">Below signal</option><option value="flat">Near signal</option></select></label><label>EMA 200<select id="a200"><option value="bull">Price above</option><option value="bear">Price below</option></select></label><label>ADX <input id="aAdx" type="number" value="24" min="0" max="100"></label><label>Activity<select id="aActivity"><option>Normal</option><option>High</option><option>Low</option></select></label></div>
+<button id="runAnalysis" class="primary">Run analysis</button><div id="analysisResult" class="result"></div></div>
+</section>
+
+<section id="signals" class="page">
+<div class="card"><div class="head"><div><h2>Signal Provider Center</h2><small>External signals are attributed to their source.</small></div><span id="signalStatus" class="status demo">NO SIGNAL FEED</span></div>
+<div class="signal-help"><b>Supported flow</b><p>TradingView alerts can send an HTTP POST webhook to the secure backend. The backend validates and stores the signal; this dashboard then displays it. TradingView recommends secure HTTPS webhook endpoints and warns against sending credentials in webhook messages.</p></div>
+<div id="signalsTable" class="table-wrap"></div>
+</div>
+<div class="card webhook-card"><h2>Webhook payload format</h2><pre>{
+  "provider": "TradingView",
+  "symbol": "EUR/USD",
+  "direction": "BUY",
+  "entry": 1.08420,
+  "stop_loss": 1.08020,
+  "take_profit": 1.09220,
+  "timeframe": "1H",
+  "message": "EMA + MACD setup"
+}</pre><p class="muted">Do not put passwords, broker credentials or private keys in webhook messages.</p></div>
+</section>
+
+<section id="risk" class="page"><div class="card"><h2>Risk & Position Size</h2><p class="muted">Verify contract and pip specifications with your broker.</p><div class="grid6"><label>Balance<input id="bal" type="number" value="10000"></label><label>Risk %<input id="rp" type="number" value="1" step=".1"></label><label>Entry<input id="en" type="number" value="1.0842" step=".00001"></label><label>Stop<input id="st" type="number" value="1.0792" step=".00001"></label><label>Pip size<input id="ps" type="number" value=".0001" step=".00001"></label><label>Pip value / lot<input id="pv" type="number" value="10" step=".01"></label></div><button id="calc" class="primary">Calculate</button><div class="riskout"><div><small>Risk</small><b id="rm">$100.00</b></div><div><small>Stop</small><b id="rps">50 pips</b></div><div><small>Size</small><b id="lots">0.20 lots</b></div><div><small>1R target</small><b id="rt">1.08920</b></div></div></div></section>
+
+<section id="journal" class="page"><div class="card"><div class="head"><h2>Trade Journal</h2><button id="clear" class="danger">Clear</button></div><form id="journalForm" class="journal"><input id="jp" required placeholder="Pair"><select id="js"><option>Long</option><option>Short</option></select><input id="je" required type="number" step=".00001" placeholder="Entry"><input id="jx" required type="number" step=".00001" placeholder="Exit"><input id="jn" placeholder="Notes"><button class="primary">Add</button></form><div id="journalTable" class="table-wrap"></div></div></section>
+
+<section id="settings" class="page"><div class="card settings"><h2>Connection Settings</h2><p class="muted">The browser should call your backend, not expose the Twelve Data secret. The backend reads its secret from an environment variable.</p><label>Backend API URL<input id="backendUrl" placeholder="https://your-backend.example.com"></label><button id="saveBackend" class="primary">Save connection</button><p id="saved" class="success"></p><div class="architecture"><b>Production flow</b><span>GitHub Pages → secure backend → Twelve Data</span><span>TradingView → HTTPS webhook → secure backend → signal store → GitHub Pages</span></div></div></section>
+
+<footer>AGU TRADING • Live-data architecture • Analysis only • No trade execution</footer>
+</main></div>
+<script src="config.js"></script><script src="app.js"></script>
+</body></html>
